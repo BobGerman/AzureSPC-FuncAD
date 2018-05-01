@@ -1,0 +1,12 @@
+{
+  "IsEncrypted": false,   
+  "Values": {
+    "TENANT": "<tenant>.onmicrosoft.com",
+    "CLIENT_ID": "<client id>",
+    "CLIENT_SECRET": "<client secret>",
+    "LISTNAME": "Comments"
+  },
+  "Host": {
+    "CORS": "*" 
+  }
+}
