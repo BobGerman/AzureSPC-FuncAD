@@ -1,7 +1,6 @@
 getToken = require('./getToken');
 getListId = require('./getListId');
 postComment = require('./postComment');
-jwt_decode = require('jwt_decode');
 
 module.exports = function (context, req) {
     context.log('AddComment1() called');
@@ -20,13 +19,11 @@ module.exports = function (context, req) {
                 context.log('Have list ID');
                 return postComment(token, req.body.siteId, listId, req.body.comment);
             }).then(resp => {
-                var x = req.headers['Authorization'];
-                var y = x.substr(7);
 
                 context.res = {
                     // status: 200, /* Defaults to 200 */
                     body: {
-                        message: "POSTED " + y
+                        message: "POSTED " + getUsername(req)
                     }
                 };
                 context.done();
@@ -51,3 +48,20 @@ module.exports = function (context, req) {
         context.done();
     }
 };
+
+function getUsername(req) {
+    var x = req.headers['x-ms-client-principal'];
+    var b = new Buffer(x, 'base64');
+    var y = b.toString('ascii');
+    var z = JSON.parse(y);
+    var n = "Godot";
+
+    for (var c in z.claims) {
+        let claim = z.claims[c];
+        if (claim.typ == "name") {
+            n = claim.val;
+        }
+    }
+
+    return n;
+}

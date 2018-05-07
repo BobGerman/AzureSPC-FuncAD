@@ -10,7 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "adal-node": "^0.1.28",
-    "jwt-decode": "^2.2.0",
     "request": "^2.85.0"
   }
 }
