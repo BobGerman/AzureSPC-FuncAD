@@ -22,7 +22,7 @@ module.exports = function (context, req) {
                 context.res = {
                     // status: 200, /* Defaults to 200 */
                     body: {
-                        message: "POSTED"
+                        message: "POSTED " + context.user
                     }
                 };
                 context.done();
@@ -41,7 +41,7 @@ module.exports = function (context, req) {
         context.res = {
             status: 400,
             body: {
-                message: "Please pass a username and comment in the request body"
+                message: "Please pass a site ID and comment in the request body"
             }
         };
         context.done();
