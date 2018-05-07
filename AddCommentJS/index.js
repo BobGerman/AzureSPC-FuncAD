@@ -1,6 +1,7 @@
 getToken = require('./getToken');
 getListId = require('./getListId');
 postComment = require('./postComment');
+jwt_decode = require('jwt_decode');
 
 module.exports = function (context, req) {
     context.log('AddComment1() called');
@@ -19,10 +20,13 @@ module.exports = function (context, req) {
                 context.log('Have list ID');
                 return postComment(token, req.body.siteId, listId, req.body.comment);
             }).then(resp => {
+                var x = req.headers['Authorization'];
+                var y = x.substr(7);
+
                 context.res = {
                     // status: 200, /* Defaults to 200 */
                     body: {
-                        message: "POSTED"
+                        message: "POSTED " + y;
                     }
                 };
                 context.done();
