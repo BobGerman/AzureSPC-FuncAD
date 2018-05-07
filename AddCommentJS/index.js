@@ -11,19 +11,22 @@ module.exports = function (context, req) {
         req.body.siteId &&
         req.body.comment) {
 
+            var username = getUsername(req);
+
             getToken().then(t => {
                 context.log('Have token');
                 token = t;
                 return getListId(token, req.body.siteId);
             }).then(listId => {
                 context.log('Have list ID');
+                let comment = `${req.body.comment} (${username})`
                 return postComment(token, req.body.siteId, listId, req.body.comment);
             }).then(resp => {
 
                 context.res = {
                     // status: 200, /* Defaults to 200 */
                     body: {
-                        message: "POSTED " + getUsername(req)
+                        message: `POSTED on behalf of ${username}`
                     }
                 };
                 context.done();
@@ -50,18 +53,22 @@ module.exports = function (context, req) {
 };
 
 function getUsername(req) {
-    var x = req.headers['x-ms-client-principal'];
-    var b = new Buffer(x, 'base64');
-    var y = b.toString('ascii');
-    var z = JSON.parse(y);
-    var n = "Godot";
 
-    for (var c in z.claims) {
+    var result = "unknown user";
+
+    var x = req.headers['x-ms-client-principal'];
+    if (x) {
+        var b = new Buffer(x, 'base64');
+        var y = b.toString('ascii');
+        var z = JSON.parse(y);
+
+        for (var c in z.claims) {
         let claim = z.claims[c];
         if (claim.typ == "name") {
-            n = claim.val;
+                result = claim.val;
+            }
         }
     }
+    return result;
 
-    return n;
 }
