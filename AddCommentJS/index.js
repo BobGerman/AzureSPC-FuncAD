@@ -20,7 +20,7 @@ module.exports = function (context, req) {
             }).then(listId => {
                 context.log('Have list ID');
                 let comment = `${req.body.comment} (${username})`
-                return postComment(token, req.body.siteId, listId, req.body.comment);
+                return postComment(token, req.body.siteId, comment);
             }).then(resp => {
 
                 context.res = {
