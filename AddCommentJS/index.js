@@ -9,8 +9,7 @@ module.exports = function (context, req) {
 
     if (req.body && 
         req.body.siteId &&
-        req.body.comment &&
-        req.body.username) {
+        req.body.comment) {
 
             getToken().then(t => {
                 context.log('Have token');
