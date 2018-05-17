@@ -1,6 +1,7 @@
 getToken = require('./getToken');
 getListId = require('./getListId');
 postComment = require('./postComment');
+getSentiment = require('./getSentiment');
 
 module.exports = function (context, req) {
     context.log('AddComment1() called');
@@ -11,15 +12,20 @@ module.exports = function (context, req) {
         req.body.siteId &&
         req.body.comment) {
 
-            var username = getUsername(req);
+           var username = getUsername(req);
+           var sentiment = "unknown";
 
-            getToken().then(t => {
+            getSentiment(req.body.comment).then(s => {
+                context.log('Have sentiment');
+                sentiment = s;
+                return getToken();
+            }).then(t => {
                 context.log('Have token');
                 token = t;
                 return getListId(token, req.body.siteId);
             }).then(listId => {
                 context.log('Have list ID');
-                let comment = `${req.body.comment} (${username})`
+                let comment = `${req.body.comment} (${sentiment}) (${username})`
                 return postComment(token, req.body.siteId, listId, comment);
             }).then(resp => {
 

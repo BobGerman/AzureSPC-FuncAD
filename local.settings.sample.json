@@ -4,7 +4,9 @@
     "TENANT": "<tenant>.onmicrosoft.com",
     "CLIENT_ID": "<client id>",
     "CLIENT_SECRET": "<client secret>",
-    "LISTNAME": "Comments"
+    "LISTNAME": "Comments",
+    "TEXT_ANALYTICS_URL": "<text analytics endpoint URL>",
+    "TEXT_ANALYTICS_KEY": "<text analytics key>"
   },
   "Host": {
     "CORS": "*" 
