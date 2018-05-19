@@ -1,0 +1,14 @@
+{
+    "$schema": "http://json.schemastore.org/proxies",
+    "proxies": {
+        "Sentiment": {
+            "matchCondition": {
+                "route": "sentiment",
+                "methods": [
+                    "POST"
+                ]
+            },
+            "backendUri": "https://eastus.api.cognitive.microsoft.com/text/analytics/v2.0/sentiment"
+        }
+    }
+}
