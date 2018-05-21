@@ -10,6 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "adal-node": "^0.1.28",
+    "azure-keyvault": "^3.0.4-preview",
+    "ms-rest-azure": "^2.5.5",
     "request": "^2.85.0"
   }
 }

@@ -20,7 +20,7 @@ module.exports = function (context, req) {
         // Get the sentiment and token+list ID in parallel
         Promise.all([
             // Get sentiment from cognitive services
-            getSentiment(req.body.comment),
+            getSentiment(context, req.body.comment),
             // Get OAuth token for app permission
             getToken().then(t => {
                 context.log('Have token');
