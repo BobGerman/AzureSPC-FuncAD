@@ -2,8 +2,10 @@ var settings = require('./settings');
 var request = require('request');
 
 module.exports = function getSentiment(comment) {
-    return new Promise((resolve, reject) => {
-        
+
+    // Always resolve - don't want to fail everything if we can't get this
+    return new Promise((resolve) => {
+    
         const endpoint = settings().TEXT_ANALYTICS_URL;
         const key = settings().TEXT_ANALYTICS_KEY;
 
@@ -31,17 +33,17 @@ module.exports = function getSentiment(comment) {
                     if (result.documents[0]) {
                         const score = result.documents[0].score;
                         if (score < 0.25) {
-                            resolve("unhappy");
+                            resolve("feeling unhappy");
                         } else if (score > 0.75) {
-                            resolve("happy");
+                            resolve("feeling happy");
                         } else {
-                            resolve("neutral");
+                            resolve("feeling neutral");
                         }
                     } else {
-                        reject (result.error[0].message);
+                        resolve ("Sentiment unknown");
                     }
                 } else {
-                    reject(response.statusCode);
+                    reject("Sentiment unknown");
                 }
             });
         } else {

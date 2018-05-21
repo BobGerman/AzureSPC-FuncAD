@@ -7,47 +7,45 @@ module.exports = function (context, req) {
     context.log('AddComment1() called');
 
     var token = null;
+    var username = getUsername(req);
+    var sentiment = "unknown";
 
     if (req.body && 
         req.body.siteId &&
         req.body.comment) {
 
-           var username = getUsername(req);
-           var sentiment = "unknown";
-
-            getSentiment(req.body.comment).then(s => {
-                context.log('Have sentiment');
-                sentiment = s;
-                return getToken();
-            }).then(t => {
+        Promise.all([
+            getSentiment(req.body.comment),
+            getToken().then(t => {
                 context.log('Have token');
                 token = t;
                 return getListId(token, req.body.siteId);
-            }).then(listId => {
-                context.log('Have list ID');
-                let comment = `${req.body.comment} (${sentiment}) (${username})`
-                return postComment(token, req.body.siteId, listId, comment);
-            }).then(resp => {
+            })
+        ]).then(results => {
+            let sentiment = results[0];
+            let listId = results[1];
+            let comment = `${req.body.comment} (${sentiment}) (${username})`
 
-                context.res = {
-                    // status: 200, /* Defaults to 200 */
-                    body: {
-                        message: `POSTED on behalf of ${username}`
-                    }
-                };
-                context.done();
-            })
-            .catch(error => {
-                context.res = {
-                    status: 400,
-                    body: {
-                        "message": "ERROR: " + error
-                    }
-                };
-                context.done();
-            })
-    }
-    else {
+            return postComment(token, req.body.siteId, listId, comment);
+        }).then(resp => {
+            context.res = {
+                // status: 200, /* Defaults to 200 */
+                body: {
+                    message: `POSTED on behalf of ${username}`
+                }
+            };
+            context.done();
+        })
+        .catch(error => {
+            context.res = {
+                status: 400,
+                body: {
+                    "message": "ERROR: " + error
+                }
+            };
+            context.done();
+        })
+    } else {
         context.res = {
             status: 400,
             body: {
