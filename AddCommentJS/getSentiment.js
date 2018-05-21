@@ -8,7 +8,8 @@ module.exports = function getSentiment(context, comment) {
     // if we can't get the sentiment
     return new Promise((resolve) => {
 
-        getSecret(context, settings().TEXT_ANALYTICS_KEY, settings().TEXT_ANALYTICS_SECRET)
+        getSecret(context, settings().TEXT_ANALYTICS_KEY, 
+                  settings().TEXT_ANALYTICS_SECRET_NAME)
         .then((key) => {
             context.log('Have key ' + key);
 
