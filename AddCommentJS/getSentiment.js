@@ -78,7 +78,7 @@ module.exports = function getSentiment(context, comment) {
             .then((credentials) => {
                 context.log('Got credentials');
                 const keyVaultClient = new KeyVault.KeyVaultClient(credentials);
-                return (keyVaultClient.getSecret(KEYVAULT_URL, 'TextAnalyticsKey'));
+                return (keyVaultClient.getSecret(KEYVAULT_URL + 'TextAnalyticsKey'));
             })
             .then((secret) => {
                 context.log('Got secret');
