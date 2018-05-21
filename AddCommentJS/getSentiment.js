@@ -10,7 +10,7 @@ module.exports = function getSentiment(context, comment) {
     // if we can't get the sentiment
     return new Promise((resolve) => {
 
-        getServiceKey()
+        getServiceKey(context)
         .then((key) => {
             context.log('Have key ' + key);
 
@@ -70,18 +70,22 @@ module.exports = function getSentiment(context, comment) {
         })
     });
 
-    function getServiceKey() {
+    function getServiceKey(context) {
 
+        context.log('Getting key');
         return new Promise((resolve, reject) => {
             msrestAzure.loginWithAppServiceMSI()
             .then((credentials) => {
+                context.log('Got credentials');
                 const keyVaultClient = new keyVault.keyVaultClient(credentials);
                 return (keyVaultClient.getSecret(KEYVAULT_URL, 'TextAnalyticsKey', ''));
             })
             .then((secret) => {
+                context.log('Got secret');
                 resolve(secret.value);
             })
             .catch((error) => {
+                context.log('ERROR - ' + error);
                 reject(error);
             })
         });
