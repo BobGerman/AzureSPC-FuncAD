@@ -8,12 +8,16 @@ module.exports = function getToken(context) {
 
   return new Promise((resolve, reject) => {
 
+    // Get the ADAL client
     const authContext = new adal.AuthenticationContext(
       settings().AUTH_URL + settings().TENANT);
  
+    // Get the client secret
     getSecret(context, settings().CLIENT_SECRET, 
                        settings().CLIENT_SECRET_NAME)
     .then((secret) => {
+      // If here we have the client secret, go ahead and get
+      // the token
       authContext.acquireTokenWithClientCredentials(
         settings().GRAPH_URL, settings().CLIENT_ID, secret, 
         (err, tokenRes) => {
@@ -23,6 +27,6 @@ module.exports = function getToken(context) {
             resolve(tokenRes.accessToken);
           }
       });
-      })
+    })
   });
 }

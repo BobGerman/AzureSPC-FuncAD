@@ -8,11 +8,12 @@ module.exports = function getSentiment(context, comment) {
     // if we can't get the sentiment
     return new Promise((resolve) => {
 
+        // First get the API key for text analytics
         getSecret(context, settings().TEXT_ANALYTICS_KEY, 
                   settings().TEXT_ANALYTICS_SECRET_NAME)
         .then((key) => {
-            context.log('Have key ' + key);
 
+            context.log('Have key for text analytics');
             const endpoint = settings().TEXT_ANALYTICS_URL;
             
             if (endpoint && key) {
