@@ -2,7 +2,6 @@ var settings = require('./settings');
 var request = require('request');
 var msrestAzure = require('ms-rest-azure');
 var KeyVault = require('azure-keyvault');
-const KEYVAULT_URL = 'https://spclogicappvault.vault.azure.net/';
 
 module.exports = function getSentiment(context, comment) {
 
@@ -74,21 +73,25 @@ module.exports = function getSentiment(context, comment) {
 
         context.log('Getting key');
         return new Promise((resolve, reject) => {
-            msrestAzure.loginWithAppServiceMSI({resource: 'https://vault.azure.net'})
-            .then((credentials) => {
-                context.log('Got credentials');
-                context.log('Keyvault url is ' + KEYVAULT_URL);
-                const keyVaultClient = new KeyVault.KeyVaultClient(credentials);
-                return (keyVaultClient.getSecret(KEYVAULT_URL, 'TextAnalyticsKey', ''));
-            })
-            .then((secret) => {
-                context.log('Got secret');
-                resolve(secret.value);
-            })
-            .catch((error) => {
-                context.log('ERROR - ' + error);
-                reject(error);
-            })
+            if (settings().TEXT_ANALYTICS_KEY) {
+                resolve(settings().TEXT_ANALYTICS_KEY);
+            } else {
+                msrestAzure.loginWithAppServiceMSI({resource: 'https://vault.azure.net'})
+                .then((credentials) => {
+                    context.log('Got credentials');
+                    const keyVaultClient = new KeyVault.KeyVaultClient(credentials);
+                    return (keyVaultClient.getSecret(Settings().KEYVAULT_URL,
+                    Settings().TEXT_ANALYTICS_SECRET, ''));
+                })
+                .then((secret) => {
+                    context.log('Got secret');
+                    resolve(secret.value);
+                })
+                .catch((error) => {
+                    context.log('ERROR - ' + error);
+                    reject(error);
+                })
+            }
         });
     }
 }
