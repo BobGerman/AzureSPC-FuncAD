@@ -22,7 +22,7 @@ module.exports = function (context, req) {
             // Get sentiment from cognitive services
             getSentiment(context, req.body.comment),
             // Get OAuth token for app permission
-            getToken().then(t => {
+            getToken(context).then(t => {
                 context.log('Have token');
                 token = t;
                 // Get list ID
@@ -30,6 +30,7 @@ module.exports = function (context, req) {
             })
         ]).then(results => {
             // If here we have both a sentiment and a token+listID
+            context.log('Have sentiment, token, and list ID');
             const sentiment = results[0];
             const listId = results[1];
             const comment = `${req.body.comment} (${sentiment}) (${username})`
@@ -38,6 +39,7 @@ module.exports = function (context, req) {
             return postComment(token, req.body.siteId, listId, comment);
         }).then(resp => {
             // All successful! Return success
+            context.log('Successfully posted');
             context.res = {
                 // status: 200, /* Defaults to 200 */
                 body: {
@@ -48,6 +50,7 @@ module.exports = function (context, req) {
         })
         .catch(error => {
             // Error encountered - return failure
+            context.log(`Error encountered ${error}`);
             context.res = {
                 status: 400,
                 body: {
