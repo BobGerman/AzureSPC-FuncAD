@@ -10,6 +10,9 @@ module.exports = function getToken() {
     const authContext = new adal.AuthenticationContext(
       settings().AUTH_URL + settings().TENANT);
  
+    // TODO: Store client secret in KeyVault just as
+    // the Text Analytics key is ... to keep the code
+    // simple it's just in settings here
     authContext.acquireTokenWithClientCredentials(
       settings().GRAPH_URL, settings().CLIENT_ID, settings().CLIENT_SECRET, 
       (err, tokenRes) => {
