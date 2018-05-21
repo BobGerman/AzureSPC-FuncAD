@@ -2,7 +2,7 @@ var settings = require('./settings');
 var request = require('request');
 var msrestAzure = require('ms-rest-azure');
 var KeyVault = require('azure-keyvault');
-const KEYVAULT_URL = 'https://spclogicappvault.vault.azure.net';
+const KEYVAULT_URL = 'https://spclogicappvault.vault.azure.net/';
 
 module.exports = function getSentiment(context, comment) {
 
@@ -74,9 +74,10 @@ module.exports = function getSentiment(context, comment) {
 
         context.log('Getting key');
         return new Promise((resolve, reject) => {
-            msrestAzure.loginWithAppServiceMSI()
+            msrestAzure.loginWithAppServiceMSI({resource: 'https://vault.azure.net'})
             .then((credentials) => {
                 context.log('Got credentials');
+                context.log('Keyvault url is ' + KEYVAULT_URL);
                 const keyVaultClient = new KeyVault.KeyVaultClient(credentials);
                 return (keyVaultClient.getSecret(KEYVAULT_URL, 'TextAnalyticsKey', ''));
             })
