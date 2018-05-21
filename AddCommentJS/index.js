@@ -91,10 +91,9 @@ function peekAndGetUsername(req) {
         const callerTokenObject =
             JSON.parse(callerTokenString);
 
-        for (let claim in callerTokenObject.claims) {
-        let claim = callerTokenObject.claims[claim];
-        if (claim.typ == "name") {
-                result = claim.val;
+        for (let claim of callerTokenObject.claims) {
+            if (claim.typ == "name") {
+                    result = claim.val;
             }
         }
     }
