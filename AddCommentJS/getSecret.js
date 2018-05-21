@@ -14,7 +14,7 @@ module.exports = function getSecret(context, knownValue, secretName) {
             .then((credentials) => {
                 context.log('Got credentials');
                 const keyVaultClient = new KeyVault.KeyVaultClient(credentials);
-                return (keyVaultClient.getSecret(Settings().KEYVAULT_URL,
+                return (keyVaultClient.getSecret(settings().KEYVAULT_URL,
                 secretName, ''));
             })
             .then((secret) => {
