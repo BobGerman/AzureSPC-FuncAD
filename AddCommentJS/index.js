@@ -71,15 +71,24 @@ module.exports = function (context, req) {
     }
 };
 
-// For demonstration purposes only!
-// See http://bit.ly/VittorioSaysDontPeek
+// "Does your dog bite?"
+// "No"
+// "Ouch!"
+// "That is not my dog."
+//   - from The Pink Panther Strikes Again
+
+// Even though Vittorio says "don't peek..."
+// (see http://bit.ly/VittorioSaysDontPeek)
 //
-// I wanted to keep the code simple and show
-// that we know the user's identity. Better
-// to pass username in as an argument (just as fast
-// as this) or, if it's not handy on the client side,
-// use on behalf of flow and ask Graph API (extra
-// round trip)
+// he's referring to clients not peeking in
+// access tokens, which are really none of their
+// business. Access tokens' soul purpose is to relay
+// information authorization info to the resource server!
+//
+// HOWEVER this is not a client token.
+// This is an App Service specific header injected by
+// Easy Auth, so it's OK to parse the token to get
+// the user information inside.
 function peekAndGetUsername(req) {
 
     let result = "unknown user";
